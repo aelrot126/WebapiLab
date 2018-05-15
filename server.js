@@ -13,6 +13,16 @@ hbs.registerPartials(__dirname + '/views/partial');
 server.get('/',(req, res)=>{
   res.render('main.hbs');
 });
+server.get('/main',(req, res)=>{
+  res.render('main.hbs');
+});
+server.get('/result',(req, res)=>{
+    res.render('result.hbs');
+});
+server.post('/form',(req, res)=>{
+    res.render('form.hbs');
+});
+
 
 server.post('/getweather',(req,res)=>{
   const addr =req.body.address;
@@ -26,14 +36,13 @@ server.post('/getweather',(req,res)=>{
     return axios.get(weatherReq);
 
   }).then((response)=>{
-    res.send(
-      {
-        address:addr,
-        summary:response.data.currently.summary,
-        temperature:(response.data.currently.temperature-32)*0.5556,
-      }
-    );
 
+
+    res.render('result.hbs',{
+      address:addr,
+      summary:response.data.currently.summary,
+      temperature:(response.data.currently.temperature-32)*0.5556,
+    });
     console.log(response.data.currently.summary);
     console.log(((response.data.currently.temperature-32)*0.5556).toFixed(2),"celcius");
 
