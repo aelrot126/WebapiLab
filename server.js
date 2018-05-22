@@ -4,6 +4,7 @@ const axios =require('axios');
 const hbs =require('hbs');
 const x="hello X";
 const bodyParser = require('body-parser');
+const filemgr = require('./filemgr');
 
 server.use(bodyParser.urlencoded( {extended: true} ));
 
@@ -19,9 +20,17 @@ server.get('/main',(req, res)=>{
 server.get('/result',(req, res)=>{
     res.render('result.hbs');
 });
+server.get('/History',(req, res)=>{
+    filemgr.getAllData().then((result)=>{
+      res.render('History.hbs',result);
+    }).catch((errorMessage)=>{
+      console.log(errorMessage);
+    });
+});
 server.post('/form',(req, res)=>{
     res.render('form.hbs');
 });
+
 
 
 server.post('/getweather',(req,res)=>{
@@ -37,14 +46,20 @@ server.post('/getweather',(req,res)=>{
 
   }).then((response)=>{
 
-
-    res.render('result.hbs',{
+    console.log(response.data.currently.summary);
+    console.log(((response.data.currently.temperature-32)*0.5556).toFixed(2));
+    const temp =(((response.data.currently.temperature-32)*0.5556).toFixed(2));
+    const tempstring = `${temp} celcius`;
+    const weatherresult = {
       address:addr,
       summary:response.data.currently.summary,
-      temperature:(response.data.currently.temperature-32)*0.5556,
+      temperature: tempstring,
+    };
+    filemgr.saveData(weatherresult).then((result) => {
+      res.render('result.hbs',weatherresult);
+    }).catch((errorMessage)=> {
+      console.log(errorMessage);
     });
-    console.log(response.data.currently.summary);
-    console.log(((response.data.currently.temperature-32)*0.5556).toFixed(2),"celcius");
 
   })
   .catch((error)=>{
