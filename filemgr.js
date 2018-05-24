@@ -28,11 +28,30 @@ const getAllData = () =>{
       if (err){
         reject('unable to connect to mongodb');
       }
-      resolve('Successfull connected to mongodb');
+      console.log('Successfull connected to mongodb');
       const db = client.db('WeatherApp');
       db.collection('weathercollection').find().toArray().then((docs)=>{
         resolve(docs);
-      },(err)=>{
+      }, (err)=>{
+        reject('unable to fetch docs');
+      });
+
+      client.close();
+    });
+
+  });
+};
+const DeleteAll = () =>{
+  return new Promise((resolve,reject)=>{
+    MongoClient.connect(database,{useNewUrlParser: true}, (err, client)=> {
+      if (err){
+        reject('unable to connect to mongodb');
+      }
+      console.log('Successfull connected to mongodb');
+      const db = client.db('WeatherApp');
+      db.collection('weathercollection').remove({}).then((result)=>{
+        resolve(result);
+      }, (err)=>{
         reject('unable to fetch docs');
       });
 
@@ -42,6 +61,7 @@ const getAllData = () =>{
   });
 };
 
+
 module.exports ={
-  saveData,getAllData,
+  saveData,getAllData,DeleteAll
 };

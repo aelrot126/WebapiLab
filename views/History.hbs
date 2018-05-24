@@ -20,8 +20,13 @@
 <div class="w3-row-padding w3-padding-64 w3-container">
   <div class="w3-content">
     <div class="w3-twothird w3-left">
+      <form action="/" method="post">
+        <button class="w3-button w3-lime w3-xlarge" type="submit" formaction="/Delete">Delete All Record</button>
+      </form>
 <h5>
-{{result}}
+  <table class="w3-table-all we-centered">
+    {{#list items}} <tr>  <td>{{address}} </td> <td>{{summary}}</td> <td>{{temperature}} </td> </tr>{{/list}}
+  </table>
 </h5>
     </div>
 
@@ -31,18 +36,6 @@
   </div>
 </div>
 
-<!-- Second Grid -->
-<div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
-  <div class="w3-content">
-    <div class="w3-third w3-center">
-      <i class="fa fa-coffee w3-padding-64 w3-text-red w3-margin-right"></i>
-    </div>
-
-    <div class="w3-twothird">
-
-    </div>
-  </div>
-</div>
 
 {{> footer}}
 
